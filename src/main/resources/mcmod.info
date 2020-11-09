@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "${modid}",
+    "name": "${modname}",
+    "description": "Removes the swing cooldown added between 1.7.10 and 1.8.",
+    "mcversion": "${mcversion}",
+    "version": "${version}",
+    "authorList": [
+    	"Cannoner",
+    	"Crystal Development"
+    ],
+    "credits": "",
+    "updateUrl": "https://crystaldev.co",
+    "url": "https://crystaldev.co"
+  }
+]

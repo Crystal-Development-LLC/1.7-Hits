@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle.forge' version '2.1-SNAPSHOT'
+    id 'io.franzbecker.gradle-lombok' version '4.0.0'
+}
+
+project.ext.modVersion = "${project.versionMajor}.${project.versionMinor}.${project.versionMicro}"
+
+group = 'club.cannoner'
+version = "${project.versionMinecraft}-${project.modVersion}"
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
+
+minecraft {
+    version = "${project.versionMinecraft}-${project.versionForge}"
+    runDir = 'run'
+    mappings = project.mappings
+    makeObfSourceJar = false
+    replaceIn 'Reference.java'
+    replace '${version}', project.modVersion
+    replace '${mcversion}', project.versionMinecraft
+    replace '${forgeversion}', project.versionForge
+}
+
+jar {
+    baseName = project.modName
+
+    manifest.attributes(
+            'ForceLoadAsMod': true,
+            'ModSide': 'CLIENT',
+    )
+
+    archiveName = jar.archiveName
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    exclude('dummyThing')
+    exclude('META-INF/maven/')
+    exclude('META-INF/nar/')
+    exclude('module-info.class')
+    exclude('META-INF/versions/')
+}
+
+sourceSets {
+    main {
+        output.resourcesDir = java.outputDir
+    }
+}
+
+processResources {
+    inputs.property 'modid', project.modId
+    inputs.property 'modname', project.modName
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        expand([
+                'modid'          : project.modId,
+                'modname'        : project.modName,
+                'version'        : project.modVersion,
+                'mcversion'      : project.versionMinecraft,
+                'forgeversion'   : project.versionForge
+        ])
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+sourceJar {
+    enabled = false
+}
